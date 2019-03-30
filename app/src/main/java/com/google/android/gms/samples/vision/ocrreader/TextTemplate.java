@@ -11,8 +11,8 @@ public class TextTemplate {
     static HashMap<TextTemplate, String[]> templToMatches = new HashMap<>();
     private ArrayList<ArrayList<String>> samples = new ArrayList<>();
     private int maxLength = 0, minLength = 100;
-    private Matches matches = new Matches(20);
-    private String bestFound = null;
+    Matches matches = new Matches(20);
+    String bestFound = null;
 
     public TextTemplate(){
         templates.add(this);

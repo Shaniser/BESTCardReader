@@ -51,6 +51,8 @@ import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -104,7 +106,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
         number = findViewById(R.id.number);
 
         String bonus ="|b|o|O|D";
-        final String bonusNumbers ="0|6| ";
+        final String bonusNumbers ="| |-";
 
         TextTemplate textTemplate = new TextTemplate();
         ArrayList<String> strings = new ArrayList<>();
@@ -187,27 +189,48 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                     while(str.length() > j && sample.matcher("" + str.charAt(j)).matches()){
                         j++;
                     }
-                    if(j - i < 5) continue;
+                    if(j - i < 1) continue;
                     String substring = str.substring(i, j);
                     if(substring.length() > bestString.length()) bestString = substring;
                 }
+                Log.d("AAAAAAAAAA", bestString);
                 return (bestString.length() < 1) ? null : bestString;
             }
 
             @Override
             public String getTotalBestMatch() {
-                return super.getTotalBestMatch();
+                String bestMatch = null;
+                int bestVal = 0;
+                HashMap<String, Integer> counts = new HashMap<>();
+                for (String str : matches) {
+
+                    if (str != null) {
+                        boolean flag = false;
+                        for (Map.Entry<String, Integer> i : counts.entrySet())
+                            if (i.getKey().equals(str)) {
+                                flag = true;
+                                i.setValue(i.getValue() + 1);
+                            }
+                        if (!flag)
+                            counts.put(str, 1);
+
+                        int tlen = str.length();
+                        if (bestVal < tlen) {
+                            bestMatch = str;
+                            bestVal = tlen;
+                        }
+                        else if (bestVal == tlen  && counts.get(bestMatch) < counts.get(str)) {
+                            bestMatch = str;
+                        }
+                    }
+                }
+                if(bestFound == null || (bestVal > bestFound.length() || bestVal == bestFound.length()))
+                    bestFound = bestMatch;
+
+                return bestFound;
             }
         };
 
-
-        for(int i = 8; i < 22; i++){
-            ArrayList<String> userNameTempl =new ArrayList<>();
-            for(int j = 0; j < i; j++){
-                userNameTempl.add("[A-Z]"+bonusNumbers);
-            }
-            userName.add(userNameTempl);
-        }
 
 
 
@@ -323,7 +346,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
         mCameraSource =
                 new CameraSource.Builder(getApplicationContext(), textRecognizer)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
-                .setRequestedPreviewSize(1280, 1024)
+                .setRequestedPreviewSize(10000, 10000)
                 .setRequestedFps(2.0f)
                 .setFlashMode(useFlash ? Camera.Parameters.FLASH_MODE_TORCH : null)
                 .setFocusMode(autoFocus ? Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE : null)

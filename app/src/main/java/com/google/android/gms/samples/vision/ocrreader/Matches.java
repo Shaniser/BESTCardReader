@@ -1,6 +1,7 @@
 package com.google.android.gms.samples.vision.ocrreader;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.Iterator;
 
@@ -34,6 +35,7 @@ public class Matches implements Iterable<String>{
         @Override
         public String next() {
             i++;
+            Log.d("ITERATOR", i + " " + lastMatches[i]);
             return lastMatches[i];
         }
     }
