@@ -63,7 +63,7 @@ import java.util.regex.Pattern;
  */
 public final class OcrCaptureActivity extends AppCompatActivity {
 
-
+    public static AppCompatActivity activity;
 
 
     public static TextView date, bankCardNumber, user, number;
@@ -100,6 +100,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
         super.onCreate(icicle);
         setContentView(R.layout.ocr_capture);
 
+        activity = this;
 
         date = findViewById(R.id.date);
         bankCardNumber = findViewById(R.id.bankCardNumber);
@@ -234,11 +235,8 @@ public final class OcrCaptureActivity extends AppCompatActivity {
 
         LinearLayout cardPreview = findViewById(R.id.cardRecognizerLayout);
 
-
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<OcrGraphic>) findViewById(R.id.graphicOverlay);
-
-        findViewById(R.id.preview).setClipToOutline(true);
 
         // read parameters from the intent used to launch the activity.
         boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);

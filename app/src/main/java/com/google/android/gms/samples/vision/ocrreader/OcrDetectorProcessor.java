@@ -52,6 +52,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
         double eps = 1.;
         for (int i = 0; i < items.size(); ++i) {
             TextBlock item = items.valueAt(i);
+            if(item.getBoundingBox().centerY() > OcrCaptureActivity.activity.findViewById(R.id.cardRecognizerLayout).getHeight()) continue;
             if((double)item.getBoundingBox().height() / (double) tempHeight > eps || (double) tempHeight / (double)item.getBoundingBox().height() > eps){
                 builder.append("******");
             }
