@@ -26,13 +26,15 @@ public class CardInstance {
         this.valid = valid;
         cards.put(this.id, this);
 
-        Thread thread = new Thread(null, new Runnable() {
-            @Override
-            public void run() {
-                company.append(executePost("https://lookup.binlist.net/" + cardNumber.replace(" ", "").substring(0,6), ""));
-            }
-        });
-        thread.start();
+        if(cardNumber != null && cardNumber.length() > 5){
+            Thread thread = new Thread(null, new Runnable() {
+                @Override
+                public void run() {
+                    company.append(executePost("https://lookup.binlist.net/" + cardNumber.replace(" ", "").substring(0,6), ""));
+                }
+            });
+            thread.start();
+        }
     }
 
     public String getCardNumber() {

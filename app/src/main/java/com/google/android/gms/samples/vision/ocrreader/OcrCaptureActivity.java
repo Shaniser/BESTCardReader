@@ -509,9 +509,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.basket:
-                Intent intent1 = getIntent();
-                finish();
-                startActivity(intent1);
+                recreate();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
