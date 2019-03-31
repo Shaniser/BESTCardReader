@@ -107,12 +107,13 @@ public final class OcrCaptureActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.about_card);
 
         activity = this;
         TextTemplate.templates = new ArrayList<>();
 
-        String bonus ="|b|o|O|D";
-        final String bonusNumbers ="| |-";
+        String bonus ="|b|o|O|D|B|H";
+        final String bonusNumbers ="|-";
 
         TextTemplate textTemplate = new TextTemplate("Date", true);
         ArrayList<String> strings = new ArrayList<>();
@@ -185,7 +186,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
         userId.add(userIdTempl);
 
 
-        TextTemplate userName=new TextTemplate("Other info", false){
+        TextTemplate userName=new TextTemplate("Owner", false){
             @Override
             public double evalFunc(String str) {
                 if(str.length() > 4) return 1;
@@ -198,7 +199,9 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                 Pattern sample = Pattern.compile("[A-Z]"+bonusNumbers);
                 for(int i = 0; i < str.length(); i++){
                     int j = i;
-                    while(str.length() > j && sample.matcher("" + str.charAt(j)).matches()){
+                    int space = 0;
+                    while(str.length() > j && ((space == 0 && str.charAt(j) == ' ') || sample.matcher("" + str.charAt(j)).matches())){
+                        if(str.charAt(j) == ' ') space++;
                         j++;
                     }
                     if(j - i < 1) continue;
@@ -249,6 +252,11 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                 Intent intent = new Intent(OcrCaptureActivity.this, AboutCard.class);
                 CardInstance cardInstance = new CardInstance((TextTemplate.templates.get(1).enabled) ? ((TextView) TextTemplate.templates.get(1).card.findViewById(R.id.editProperty)).getText().toString() : null,(TextTemplate.templates.get(2).enabled) ?  ((TextView) TextTemplate.templates.get(2).card.findViewById(R.id.editProperty)).getText().toString() : null, (TextTemplate.templates.get(3).enabled) ? ((TextView) TextTemplate.templates.get(3).card.findViewById(R.id.editProperty)).getText().toString() : null,(TextTemplate.templates.get(0).enabled) ?  ((TextView) TextTemplate.templates.get(0).card.findViewById(R.id.editProperty)).getText().toString() : null);
                 intent.putExtra("id", cardInstance.getId());
+//                try{
+//                    Thread.currentThread().sleep(100);
+//                }catch (Exception e){
+//
+//                }
                 finish();
                 startActivity(intent);
             }
@@ -496,10 +504,14 @@ public final class OcrCaptureActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
+                Intent intent = new Intent(this, MainActivity.class);
+                finish();
+                startActivity(intent);
                 return true;
             case R.id.basket:
-                recreate();
+                Intent intent1 = getIntent();
+                finish();
+                startActivity(intent1);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

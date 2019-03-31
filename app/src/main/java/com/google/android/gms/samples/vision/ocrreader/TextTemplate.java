@@ -176,6 +176,8 @@ public class TextTemplate {
         num = num.replace("O", "0");
         num = num.replace("o", "0");
         num = num.replace("D", "0");
+        num = num.replace("B", "8");
+        num = num.replace("H", "4");
 
         return num;
     }

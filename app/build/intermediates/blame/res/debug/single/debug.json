@@ -592,10 +592,6 @@
         "source": "/Users/shaniser/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/ab686148a1f65aba926f21b6cc5ff446/res/drawable-xhdpi-v4/abc_scrubber_control_off_mtrl_alpha.png"
     },
     {
-        "merged": "/Users/shaniser/Desktop/BESTCardReader/app/build/intermediates/res/merged/debug/layout-land-v17_activity_main.xml.flat",
-        "source": "/Users/shaniser/Desktop/BESTCardReader/app/src/main/res/layout-land-v17/activity_main.xml"
-    },
-    {
         "merged": "/Users/shaniser/Desktop/BESTCardReader/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4_abc_btn_check_to_on_mtrl_000.png.flat",
         "source": "/Users/shaniser/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/ab686148a1f65aba926f21b6cc5ff446/res/drawable-xxxhdpi-v4/abc_btn_check_to_on_mtrl_000.png"
     },

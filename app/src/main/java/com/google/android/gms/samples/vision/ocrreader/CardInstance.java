@@ -56,7 +56,11 @@ public class CardInstance {
     }
 
     public String getCompany(){
-        return company.toString();
+        try {
+            return company.toString().substring(company.toString().indexOf("\"bank\":{\"name\":\"", 0) + 16, company.toString().indexOf(",\"url\"") - 1);
+        } catch (Exception e) {
+            return  "";
+        }
     }
 
     public String getPaymentSystem() {

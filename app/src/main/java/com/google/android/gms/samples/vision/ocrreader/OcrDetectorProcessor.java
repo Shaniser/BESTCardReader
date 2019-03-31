@@ -63,9 +63,6 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             }
             tempHeight = item.getBoundingBox().height();
             builder.append(item.getValue());
-
-            OcrGraphic graphic = new OcrGraphic(mGraphicOverlay, item);
-            mGraphicOverlay.add(graphic);
         }
 
         boolean ok = true;
@@ -73,7 +70,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             if(tt.enabled) {
                 final EditText editText = ((EditText) tt.card.findViewById(R.id.editProperty));
                 if (!tt.userEdited) {
-                    String match = tt.getBestMatch(builder.toString());
+                    String match = tt.getBestMatch(builder.toString().replace("\n", "*****"));
                     tt.addMatch(match);
                     final String str = tt.getTotalBestMatch();
 

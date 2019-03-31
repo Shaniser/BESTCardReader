@@ -1,4 +1,4 @@
-#Sun Mar 31 08:49:15 MSK 2019
+#Sun Mar 31 10:40:45 MSK 2019
 base.0=/Users/shaniser/Desktop/BESTCardReader/app/build/intermediates/transforms/dexMerger/debug/5
 path.0=classes.dex
 renamed.0=classes.dex
