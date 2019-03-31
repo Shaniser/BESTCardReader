@@ -829,6 +829,7 @@ drawable design_snackbar_background
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable icon
+drawable little_minus
 drawable navigation_empty_icon
 drawable notification_action_background
 drawable notification_bg
@@ -879,7 +880,6 @@ id always
 id async
 id auto
 id auto_focus
-id bankCardNumber
 id barrier
 id beginning
 id blocking
@@ -902,7 +902,6 @@ id coordinator
 id custom
 id customPanel
 id dark
-id date
 id decor_content_parent
 id default_activity_button
 id design_bottom_sheet
@@ -913,6 +912,8 @@ id design_navigation_view
 id dimensions
 id direct
 id disableHome
+id edit
+id editProperty
 id edit_query
 id end
 id end_padder
@@ -930,6 +931,7 @@ id ghost_view
 id gone
 id graphicOverlay
 id groups
+id headerProperty
 id home
 id homeAsUp
 id icon
@@ -961,7 +963,6 @@ id normal
 id notification_background
 id notification_main_column
 id notification_main_column_container
-id number
 id packed
 id parallax
 id parent
@@ -972,6 +973,7 @@ id pin
 id preview
 id progress_circular
 id progress_horizontal
+id propertiesLinLay
 id radio
 id read_text
 id right
@@ -1024,10 +1026,6 @@ id text
 id text2
 id textSpacerNoButtons
 id textSpacerNoTitle
-id textView
-id textView2
-id textView5
-id textView6
 id text_input_password_toggle
 id text_value
 id textinput_counter
@@ -1049,7 +1047,7 @@ id uniform
 id up
 id useLogo
 id use_flash
-id user
+id using
 id view_offset_helper
 id visible
 id wide
@@ -1125,6 +1123,8 @@ layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
 layout ocr_capture
+layout property_card
+layout ripple_round
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material

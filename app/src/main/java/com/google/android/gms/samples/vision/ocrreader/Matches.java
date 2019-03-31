@@ -35,7 +35,6 @@ public class Matches implements Iterable<String>{
         @Override
         public String next() {
             i++;
-            Log.d("ITERATOR", i + " " + lastMatches[i]);
             return lastMatches[i];
         }
     }

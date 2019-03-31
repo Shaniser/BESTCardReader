@@ -17,6 +17,10 @@ package com.google.android.gms.samples.vision.ocrreader;
 
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.samples.vision.ocrreader.ui.camera.GraphicOverlay;
 import com.google.android.gms.vision.Detector;
@@ -52,7 +56,6 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
         double eps = 1.;
         for (int i = 0; i < items.size(); ++i) {
             TextBlock item = items.valueAt(i);
-            if(item.getBoundingBox().centerY() > OcrCaptureActivity.activity.findViewById(R.id.cardRecognizerLayout).getHeight()) continue;
             if((double)item.getBoundingBox().height() / (double) tempHeight > eps || (double) tempHeight / (double)item.getBoundingBox().height() > eps){
                 builder.append("******");
             }
@@ -63,36 +66,19 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             mGraphicOverlay.add(graphic);
         }
 
-        String match = TextTemplate.templates.get(0).getBestMatch(builder.toString());
-        TextTemplate.templates.get(0).addMatch(match);
+        for(final TextTemplate tt : TextTemplate.templates){
+            if(tt.enabled) {
+                if (!tt.userEdited) {
+                    String match = tt.getBestMatch(builder.toString());
+                    tt.addMatch(match);
+                    String str = tt.getTotalBestMatch();
 
-        String str = TextTemplate.templates.get(0).getTotalBestMatch();
-
-        String match1 = TextTemplate.templates.get(1).getBestMatch(builder.toString());
-        TextTemplate.templates.get(1).addMatch(match1);
-
-        String str1 = TextTemplate.templates.get(1).getTotalBestMatch();
-
-        String match2 = TextTemplate.templates.get(2).getBestMatch(builder.toString());
-        TextTemplate.templates.get(2).addMatch(match2);
-
-        String str2 = TextTemplate.templates.get(2).getTotalBestMatch();
-
-        String match3 = TextTemplate.templates.get(3).getBestMatch(builder.toString());
-        TextTemplate.templates.get(3).addMatch(match3);
-
-        String str3 = TextTemplate.templates.get(3).getTotalBestMatch();
-
-        str1 = checkSevens(str1);
-
-        OcrCaptureActivity.date.setText((str != null) ? str : "Not recognized!");
-        OcrCaptureActivity.bankCardNumber.setText((str1 != null) ? str1 : "Not recognized!");
-        OcrCaptureActivity.number.setText((str2 != null) ? str2 : "Not recognized!");
-        OcrCaptureActivity.user.setText((str3 != null) ? str3 : "Not recognized!");
-
-
-
-
+                    EditText editText = ((EditText) tt.card.findViewById(R.id.editProperty));
+                    if (editText.getText().toString().compareTo(str) != 0)
+                        editText.setText((str != null) ? str : "Not recognized!");
+                }
+            }
+        }
     }
 
     /**
@@ -122,36 +108,6 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             sum += digits[i];
         }
         return sum % 10 == 0;
-    }
-
-    /**
-     * Принимает номер карты, и если она не валидна, возвращает наиболее похожий вариант
-     * @param num
-     * @return Если подобрать не удалось - вернет изначальное число
-     */
-    static String checkSevens(String num) {
-        try {
-            num = num.trim();
-            num = num.replace("b", "6");
-            if (checkLuhn(num))
-                return num;
-            ArrayList<Integer> indicies = new ArrayList<>();
-            for (int i = 0; i < num.length(); i++) {
-                if (num.charAt(i) == '1')
-                    indicies.add(i);
-            }
-            for (int i = 0; i < (1 << indicies.size()); i++) {
-                StringBuilder builder = new StringBuilder(num);
-                for (int j = 0; j < indicies.size(); j++)
-                    if ((i & (1 << j)) != 0)
-                        builder.setCharAt(indicies.get(j), '7');
-                if (checkLuhn(builder.toString()))
-                    return builder.toString();
-            }
-        }catch (Exception e){
-
-        }
-        return num;
     }
 
     /**

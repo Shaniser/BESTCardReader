@@ -101,16 +101,12 @@ public final class OcrCaptureActivity extends AppCompatActivity {
         setContentView(R.layout.ocr_capture);
 
         activity = this;
-
-        date = findViewById(R.id.date);
-        bankCardNumber = findViewById(R.id.bankCardNumber);
-        user = findViewById(R.id.user);
-        number = findViewById(R.id.number);
+        TextTemplate.templates = new ArrayList<>();
 
         String bonus ="|b|o|O|D";
         final String bonusNumbers ="| |-";
 
-        TextTemplate textTemplate = new TextTemplate();
+        TextTemplate textTemplate = new TextTemplate("Date", true);
         ArrayList<String> strings = new ArrayList<>();
         strings.add("[0-1]");
         strings.add("[0-9]");
@@ -119,7 +115,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
         strings.add("[0-9]");
         textTemplate.add(strings);
 
-        TextTemplate backCardNumber = new TextTemplate();
+        TextTemplate backCardNumber = new TextTemplate("Bank card ID", true);
         ArrayList<String> cardNumbers = new ArrayList<>();
         cardNumbers.add("[0-9]"+bonus);
         cardNumbers.add("[0-9]"+bonus);
@@ -165,7 +161,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
         backCardNumber.add(cardNumbers1);
 
 
-        TextTemplate userId=new TextTemplate();
+        TextTemplate userId=new TextTemplate("Card ID", true);
         ArrayList<String> userIdTempl=new ArrayList<>();
         userIdTempl.add("[0-9]"+bonus);
         userIdTempl.add("[0-9]"+bonus);
@@ -181,7 +177,13 @@ public final class OcrCaptureActivity extends AppCompatActivity {
         userId.add(userIdTempl);
 
 
-        TextTemplate userName=new TextTemplate(){
+        TextTemplate userName=new TextTemplate("Other info", false){
+            @Override
+            public double evalFunc(String str) {
+                if(str.length() > 4) return 1;
+                return 0;
+            }
+
             @Override
             public String getBestMatch(String str) {
                 String bestString = "";
@@ -249,6 +251,12 @@ public final class OcrCaptureActivity extends AppCompatActivity {
             createCameraSource(autoFocus, useFlash);
         } else {
             requestCameraPermission();
+        }
+
+        LinearLayout linearLayout = findViewById(R.id.propertiesLinLay);
+        for(TextTemplate tt : TextTemplate.templates){
+            Log.d("Template", "ADDING CARD");
+            tt.toAddPropertyCard(this, linearLayout);
         }
     }
 

@@ -1,6 +1,18 @@
 package com.google.android.gms.samples.vision.ocrreader;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +25,16 @@ public class TextTemplate {
     private int maxLength = 0, minLength = 100;
     Matches matches = new Matches(20);
     String bestFound = null;
+    private String propery;
+    private boolean onlyNumbers;
+    public boolean userEdited = false, enabled = true;
+    public View card;
 
-    public TextTemplate(){
+    public TextTemplate(String property, boolean onlyNumbers){
         templates.add(this);
         templToMatches.put(this, new String[20]);
+        this.propery = property;
+        this.onlyNumbers = onlyNumbers;
     }
 
     public void add(ArrayList<String> str){
@@ -29,7 +47,7 @@ public class TextTemplate {
         matches.add(str);
     }
 
-    private double evalFunc(String str){
+    public double evalFunc(String str){
         if(str == null) return 0;
         double best = 0;
         for (ArrayList<String> sample : samples){
@@ -61,7 +79,7 @@ public class TextTemplate {
             }
         }
 
-        return bestString;
+        return onlyNumbers ? replaceSymbols(bestString) : bestString;
     }
 
     public String getTotalBestMatch(){
@@ -86,5 +104,79 @@ public class TextTemplate {
         if(bestVal > evalFunc(bestFound) || Math.abs(bestVal - evalFunc(bestFound)) < 1e-3) bestFound = bestMatch;
 
         return bestFound;
+    }
+
+    public void toAddPropertyCard(Context context, final LinearLayout linearLayout){
+        final View view = LayoutInflater.from(context).inflate(R.layout.property_card, null);
+        TextView headerText = view.findViewById(R.id.headerProperty);
+        headerText.setText(propery);
+        final EditText editText = view.findViewById(R.id.editProperty);
+        editText.setEnabled(false);
+        editText.setText((bestFound != null) ? bestFound : "");
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(Math.abs(evalFunc(editText.getText().toString()) - 1) < 1e-3){
+                    editText.setTextColor(Color.GREEN);
+                }else{
+                    editText.setTextColor(Color.RED);
+                }
+            }
+        });
+
+        CheckBox using = view.findViewById(R.id.using);
+        using.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(!b){
+                    enabled = false;
+                    editText.setTextColor(Color.parseColor("#BDC3C7"));
+                }else{
+                    enabled = true;
+                    if(Math.abs(evalFunc(editText.getText().toString()) - 1) < 1e-3){
+                        editText.setTextColor(Color.GREEN);
+                    }else{
+                        editText.setTextColor(Color.RED);
+                    }
+                }
+
+            }
+        });
+
+        view.findViewById(R.id.edit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editText.setEnabled(true);
+                editText.requestFocus();
+                userEdited = true;
+            }
+        });
+        card = view;
+        linearLayout.addView(view);
+    }
+
+    /**
+     * Принимает номер карты, и если она не валидна, возвращает наиболее похожий вариант
+     * @param num
+     * @return Если подобрать не удалось - вернет изначальное число
+     */
+    static String replaceSymbols(String num) {
+        if(num == null) return null;
+        num = num.replace("b", "6");
+        num = num.replace("O", "0");
+        num = num.replace("o", "0");
+        num = num.replace("D", "0");
+
+        return num;
     }
 }
