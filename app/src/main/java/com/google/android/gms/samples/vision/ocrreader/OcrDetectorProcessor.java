@@ -15,10 +15,12 @@
  */
 package com.google.android.gms.samples.vision.ocrreader;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -66,18 +68,41 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             mGraphicOverlay.add(graphic);
         }
 
+        boolean ok = true;
         for(final TextTemplate tt : TextTemplate.templates){
             if(tt.enabled) {
+                final EditText editText = ((EditText) tt.card.findViewById(R.id.editProperty));
                 if (!tt.userEdited) {
                     String match = tt.getBestMatch(builder.toString());
                     tt.addMatch(match);
-                    String str = tt.getTotalBestMatch();
+                    final String str = tt.getTotalBestMatch();
 
-                    EditText editText = ((EditText) tt.card.findViewById(R.id.editProperty));
-                    if (editText.getText().toString().compareTo(str) != 0)
-                        editText.setText((str != null) ? str : "Not recognized!");
+                    if (editText.getText().toString().compareTo(str) != 0){
+                        OcrCaptureActivity.activity.runOnUiThread(new Runnable() {
+                            public void run() {
+                                editText.setText((str != null) ? str : "Not recognized!");
+                            }
+                        });
+                    }
+
                 }
+                ok &= Math.abs(tt.evalFunc(editText.getText().toString()) - 1) < 1e-3;
             }
+        }
+        final Button button = OcrCaptureActivity.activity.findViewById(R.id.save);
+        if(ok){
+            OcrCaptureActivity.activity.runOnUiThread(new Runnable() {
+                public void run() {
+                    button.setVisibility(View.VISIBLE);
+                }
+            });
+
+        }else{
+            OcrCaptureActivity.activity.runOnUiThread(new Runnable() {
+                public void run() {
+                    button.setVisibility(View.GONE);
+                }
+            });
         }
     }
 

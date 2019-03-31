@@ -31,12 +31,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,6 +103,10 @@ public final class OcrCaptureActivity extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.ocr_capture);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         activity = this;
         TextTemplate.templates = new ArrayList<>();
@@ -233,6 +241,18 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                 return bestFound;
             }
         };
+
+        Button button = OcrCaptureActivity.activity.findViewById(R.id.save);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OcrCaptureActivity.this, AboutCard.class);
+                CardInstance cardInstance = new CardInstance((TextTemplate.templates.get(1).enabled) ? ((TextView) TextTemplate.templates.get(1).card.findViewById(R.id.editProperty)).getText().toString() : null,(TextTemplate.templates.get(2).enabled) ?  ((TextView) TextTemplate.templates.get(2).card.findViewById(R.id.editProperty)).getText().toString() : null, (TextTemplate.templates.get(3).enabled) ? ((TextView) TextTemplate.templates.get(3).card.findViewById(R.id.editProperty)).getText().toString() : null,(TextTemplate.templates.get(0).enabled) ?  ((TextView) TextTemplate.templates.get(0).card.findViewById(R.id.editProperty)).getText().toString() : null);
+                intent.putExtra("id", cardInstance.getId());
+                finish();
+                startActivity(intent);
+            }
+        });
 
 
         LinearLayout cardPreview = findViewById(R.id.cardRecognizerLayout);
@@ -453,6 +473,36 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                 mCameraSource.release();
                 mCameraSource = null;
             }
+        }
+    }
+
+    /**
+     * Настройка шапки
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    /**
+     * Обработка нажатия на элементы шапки
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            case R.id.basket:
+                recreate();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

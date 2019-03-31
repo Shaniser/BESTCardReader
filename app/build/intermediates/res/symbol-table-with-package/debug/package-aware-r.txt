@@ -828,6 +828,8 @@ drawable design_password_eye
 drawable design_snackbar_background
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
+drawable ic_edit_black_24dp
+drawable ic_refresh_black_24dp
 drawable icon
 drawable little_minus
 drawable navigation_empty_icon
@@ -881,6 +883,7 @@ id async
 id auto
 id auto_focus
 id barrier
+id basket
 id beginning
 id blocking
 id bottom
@@ -968,6 +971,8 @@ id parallax
 id parent
 id parentPanel
 id parent_matrix
+id paymentConstLinLay
+id paymentSystem
 id percent
 id pin
 id preview
@@ -979,6 +984,7 @@ id read_text
 id right
 id right_icon
 id right_side
+id save
 id save_image_matrix
 id save_non_transition_alpha
 id save_scale_type
@@ -987,6 +993,7 @@ id scroll
 id scrollIndicatorDown
 id scrollIndicatorUp
 id scrollView
+id scrollView2
 id scrollable
 id search_badge
 id search_bar
@@ -1043,6 +1050,7 @@ id transition_layout_save
 id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
+id type
 id uniform
 id up
 id useLogo
@@ -1092,6 +1100,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_about_card
 layout activity_main
 layout design_bottom_navigation_item
 layout design_bottom_sheet_dialog
@@ -1123,12 +1132,14 @@ layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
 layout ocr_capture
+layout property
 layout property_card
 layout ripple_round
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
+menu main
 string abc_action_bar_home_description
 string abc_action_bar_up_description
 string abc_action_menu_overflow_description
